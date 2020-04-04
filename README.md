@@ -10,6 +10,10 @@
 
 <a href="https://www.buymeacoffee.com/MVg9wc2HE" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
 
+<p align="center">
+<img src="./icons/logo.png" alt="Logo" style="margin:auto"/>
+</p>
+
 Whatsapp Bot  🤖  for Node-Red based on [sulla](https://github.com/danielcardeenas/sulla)
 
 **BETA: This is package is under development**
