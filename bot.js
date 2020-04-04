@@ -77,12 +77,14 @@ module.exports = function (RED) {
           // register for chat event
           node.client[msg.topic](chatId, onChatEvent.bind(node, msg.topic, chatId))
         } else {
-          node.client[msg.topic](msg.payload).then((...args) => {
+          node.client[msg.topic](...msg.payload).then((...args) => {
             node.send({
               topic: msg.topic,
               payload: args,
               origin: msg
             })
+          }).catch(err => {
+            node.error('Requested api "' + msg.topic + '" ' + err.message)
           })
         }
       } else {
