@@ -41,7 +41,7 @@ module.exports = function (RED) {
     }
 
     function onStateChange (socketState) {
-      setStatus(SOCKETS_STATE[socketState], socketState)
+      setStatus(SOCKETS_STATE[socketState], 'Socket state: ' + socketState)
     }
 
     function onEvent (event, ...args) {
