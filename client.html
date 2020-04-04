@@ -1,20 +1,13 @@
 <script type="text/javascript">
     RED.nodes.registerType('whatsapp-client', {
         category: 'config',
-        icon: 'whatsapp.png',
         defaults: {
             session: {
                 value: "session",
                 required: true
             },
-            headless: {
-                value: true,
-                required: true
-            },
-            devtools: {
-                value: false,
-                required: true
-            },
+            headless: { value: true },
+            devtools: { value: false }
         },
         label: function () {
             return 'whatsapp' + ":" + this.session;
