@@ -1,0 +1,98 @@
+<script type="text/javascript">
+    RED.nodes.registerType('whatsapp-bot', {
+      category: 'Whatsapp Bot',
+      color: '#25D366',
+      defaults: {
+        name: {value: ''},
+        client: {type: 'whatsapp-client', required: true},
+      },
+      inputs: 1,
+      outputs: 1,
+      align: "left",
+      icon: 'whatsapp.png',
+      paletteLabel: 'Whatsapp Bot',
+      label: function () {
+        return this.name || 'Whatsapp Bot'
+      }
+    })
+  </script>
+
+
+<script type="text/html" data-template-name="whatsapp-bot">
+    <div class="form-row">
+        <label for="node-input-client"><i class="icon-globe"></i> <span> Client</span></label>
+        <input type="text" id="node-input-client">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="whatsapp-bot">
+  <p>Used to send/receive data from a Whatsapp Client</p>
+  
+  <h3>Inputs</h3>
+  <ol class="node-ports">
+     <li>Input
+         <dl class="message-properties">
+             <dt>payload <span class="property-type">Object</span></dt>
+             <dd>Command data.</dd>
+         </dl>
+         <dl class="message-properties">
+             <dt>topic <span class="property-type">String</span></dt>
+             <dd>Command name.</dd>
+         </dl>
+     </li>
+  </ol>
+  
+  <h3>Outputs</h3>
+  <ol class="node-ports">
+     <li>Output
+         <dl class="message-properties">
+             <dt>payload <span class="property-type">Object</span></dt>
+             <dd>Response data of the command.</dd>
+         </dl>
+         <dl class="message-properties">
+             <dt>topic <span class="property-type">String</span></dt>
+             <dd>Command name.</dd>
+         </dl>
+     </li>
+  </ol>
+  
+  <h3>Input</h3>
+  
+  <code>msg.topic</code> contains the command name. Allowed commands are:
+  <ul>
+      <li><b>restart</b> - Restarts the client connection.
+      <li><b>scan</b> - Used to trigger a new scan of M-Bus network (will update <code>mbus_devices_<clientName>.json</code> file if <code>storeDevices</code> option is set to true)
+      <li><b>setDevices</b> - Used to manually set the array with the devices IDs (primary and/or secondary) to read. <code>msg.payload</code> must be a valid array of strings/numbers
+      <li><b>getDevices</b> - Used to get the Object with devices all datas and errors.
+      <li><b>getDevice</b> - Read a specific device ID specified in <code>msg.payload.address</code>.
+      <li><b>setPrimary</b> - Set device Primary ID. <code>msg.payload</code> needs <code>oldAddr</code> and <code>newAddr</code> properties:
+      <code>oldAddr</code> can be the primary or the secondary ID of the device,
+      <code>newAddr</code> must be a valid primary ID <code>Int</code> between 0-250,
+      <code>{newAddr: 'theNewAddr', oldAddr: 'theOldAddress'}</code>.
+  
+  </ul>
+  
+  <h3>Outputs</h3>
+  
+  <code>msg.topic</code> contains the command name. Outputs of commands are:
+  <ul>
+      <li><b>scan</b> - If success, <code>msg.payload</code> will contain the Array of devices found
+      <li><b>getDevices</b> - <code>msg.payload.devices</code> will contains the Devices data Object, <code>msg.payload.errors will contain a list of devices with an error</code>.
+      <li><b>getDevice</b> - If success, <code>msg.payload</code> will contain requested device ID data.
+      <li><b>setPrimary</b> - If success, <code>msg.payload</code> will contain the same info as input payload
+      <code>{newAddr: 'theNewAddr', oldAddr: 'theOldAddress'}</code>.
+  </ul>
+  
+  <p>For more info about the payload of messages check
+  <a href="https://github.com/robertsLando/node-red-contrib-m-bus#nodes">Nodes</a> section</p>
+  
+  <h3>References</h3>
+    <ul>
+        <li><a href="https://github.com/robertsLando/node-red-contrib-m-bus">GitHub</a> - the node github repository</li>
+    </ul>
+  
+  </script>
