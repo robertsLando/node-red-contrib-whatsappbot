@@ -34,8 +34,8 @@
   </div>
 </script>
 
-<script type="text/x-red" data-help-name="whatsapp-bot">
-  <p>Used to send/receive data from a Whatsapp Client. Each Bot node by default subscribes to 'onMessage' 'onAck' and 'onAddedToGroup' events</p>
+<script type="text/html" data-help-name="whatsapp-bot">
+  <p>Used to send/receive data from a Whatsapp Client. Each Bot node by default subscribes to <code>onMessage</code>, <code>onAck</code> and <code>onAddedToGroup</code> events</p>
   
   <h3>Input</h3>
   <ol class="node-ports">
@@ -51,22 +51,6 @@
      </li>
   </ol>
 
-  <p>Function node code example for:</p>
-     <code>
-        msg.payload = { topic: 'sendMessageToId', payload: [ 'xxxxxxxxxxxx@c.us', 'Hello from Node-Red'] }
-        return msg
-     </code>
-
-  <p>Result:</p>
-  <code>
-    { topic: 'sendMessageToId', payload: [ true ], origin: { //the origin message request } }
- </code>
-
- <p>Example output for an <code>onMessage</code> event</p>
- <code>
-  { topic: 'onMessage', payload: [ { // the message object } ] }
- </code>
-  
   <h3>Outputs</h3>
   <ol class="node-ports">
      <li>Output
@@ -80,6 +64,27 @@
          </dl>
      </li>
   </ol>
+
+  <h3>Examples</h3>
+
+  <p>If you want to subscribe to <code>onParticipantsChanged</code> or <code>onLiveLocation</code>, send the request with only the <code>chatId</code> and 
+    it will subscribe for those events on that chat. The output <code>msg</code> contain also a property <code>chatId</code> with the id of the chat that has emitted the event</p>
+
+  <p>Function node code for calling <code>sendMessageToId</code> API:</p>
+  <code>
+    msg.payload = { topic: 'sendMessageToId', payload: [ 'xxxxxxxxxxxx@c.us', 'Hello from Node-Red'] }
+    return msg
+  </code>
+
+  <p>Result of previous message:</p>
+  <code>
+    { topic: 'sendMessageToId', payload: [ 'true_xxxxxxxxxx@c.us_xxxxxxxxxxxx' ], origin: { //the origin message request } }
+  </code>
+
+ <p>Output for an <code>onMessage</code> event:</p>
+ <code>
+  { topic: 'onMessage', payload: [ { // the message object } ] }
+ </code>
   
   <h3>References</h3>
     <ul>
