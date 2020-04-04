@@ -55,7 +55,7 @@ module.exports = function (RED) {
     if (clientNode) {
       clientNode.register(node)
 
-      setStatus('warning', 'Connecting to client...')
+      setStatus('warning', 'Authenticating...')
 
       clientNode.on('ready', function (client) {
         setStatus('success', 'Connected')
