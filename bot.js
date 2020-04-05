@@ -7,12 +7,6 @@ module.exports = function (RED) {
     const node = this
     node.name = config.name
 
-    const CLIENT_EVENTS = [
-      'onMessage',
-      'onAck',
-      'onAddedToGroup'
-    ]
-
     const SOCKETS_STATE = {
       OPENING: 'info',
       PAIRING: 'info',
@@ -31,21 +25,16 @@ module.exports = function (RED) {
     const clientNode = RED.nodes.getNode(config.client)
 
     function registerEvents () {
-      if (!node.client) return
-
-      for (const event of CLIENT_EVENTS) {
-        node.client[event](onEvent.bind(node, event))
-      }
-
-      node.on('stateChange', onStateChange.bind(node))
+      clientNode.on('stateChange', onStateChange.bind(node))
+      clientNode.on('clientEvent', onClientEvent.bind(node))
     }
 
     function onStateChange (socketState) {
-      setStatus(SOCKETS_STATE[socketState], 'Socket state: ' + socketState)
+      setStatus(SOCKETS_STATE[socketState], 'Socket: ' + socketState)
     }
 
-    function onEvent (event, ...args) {
-      node.send({ topic: event, args: args })
+    function onClientEvent (eventName, ...args) {
+      node.send({ topic: eventName, payload: args })
     }
 
     function onChatEvent (event, chatId, ...args) {
@@ -56,6 +45,10 @@ module.exports = function (RED) {
       clientNode.register(node)
 
       setStatus('warning', 'Authenticating...')
+
+      clientNode.on('qrCode', function (qrCode) {
+        node.send({ topic: 'qrCode', payload: [qrCode] })
+      })
 
       clientNode.on('ready', function (client) {
         setStatus('success', 'Connected')

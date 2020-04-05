@@ -3,14 +3,36 @@ module.exports = function (RED) {
 
   const { create } = require('sulla')
 
+  const RETRY_TIMEOUT = 10000
+
+  const EVENTS = [
+    'onMessage',
+    'onAck',
+    'onAddedToGroup'
+  ]
+
   function WhatsappClient (config) {
     RED.nodes.createNode(this, config)
     const node = this
 
     var client = null
 
+    function registerEvents () {
+      for (const event of EVENTS) {
+        client[event](onEvent.bind(node, event))
+      }
+    }
+
+    function onEvent (eventName, ...args) {
+      node.emit('clientEvent', eventName, ...args)
+    }
+
+    function onQrCode (qrCode) {
+      node.emit('qrCode', qrCode)
+    }
+
     async function startClient () {
-      client = await create(config.session, {
+      client = await create(config.session, onQrCode, {
         headless: config.headless,
         devtools: config.devtools
       })
@@ -46,10 +68,13 @@ module.exports = function (RED) {
       if (Object.keys(node.registeredNodeList).length === 1) {
         startClient()
           .then(() => {
+            registerEvents()
             node.emit('ready', client)
           })
           .catch((err) => {
             node.error('Error while starting Whatsapp client "' + config.session + '": ' + err.message)
+            // retry
+            setTimeout(node.register.bind(node, nodeToRegister), RETRY_TIMEOUT)
           })
       }
     }
