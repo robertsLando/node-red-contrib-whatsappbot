@@ -44,6 +44,9 @@ module.exports = function (RED) {
 
         node.emit('stateChange', state)
       })
+
+      registerEvents()
+      node.emit('ready', client)
     }
 
     node.on('close', function (done) {
@@ -67,15 +70,18 @@ module.exports = function (RED) {
       node.registeredNodeList[nodeToRegister.id] = nodeToRegister
       if (Object.keys(node.registeredNodeList).length === 1) {
         startClient()
-          .then(() => {
-            registerEvents()
-            node.emit('ready', client)
-          })
           .catch((err) => {
             node.error('Error while starting Whatsapp client "' + config.session + '": ' + err.message)
             // retry
             setTimeout(node.register.bind(node, nodeToRegister), RETRY_TIMEOUT)
           })
+      }
+    }
+
+    node.restart = async function () {
+      if (client) {
+        await client.close()
+        await startClient()
       }
     }
   }
