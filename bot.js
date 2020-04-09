@@ -60,21 +60,25 @@ module.exports = function (RED) {
     }
 
     node.on('input', function (msg) {
+
+      if (msg.topic === 'restart') {
+        setStatus('warning', 'Authenticating...')
+        clientNode.restart()
+          .then(() => node.send({ topic: msg.topic, origin: msg, payload: [true] }))
+          .catch((err) => node.error('Error while restarting client ' + err.message))
+        return
+      }
+
       if (!node.client) {
         setStatus('error', 'Client not connected')
         return
       }
 
-      if (typeof node.client[msg.topic] === 'function' || msg.topic === 'restart') {
+      if (typeof node.client[msg.topic] === 'function') {
         if (msg.topic === 'onParticipantsChanged' || msg.topic === 'onLiveLocation') {
           const chatId = msg.payload[0]
           // register for chat event
           node.client[msg.topic](chatId, onChatEvent.bind(node, msg.topic, chatId))
-        } else if (msg.topic === 'restart') {
-          setStatus('warning', 'Authenticating...')
-          clientNode.restart()
-            .then(() => node.send({ topic: msg.topic, origin: msg, payload: [true] }))
-            .catch((err) => node.error('Error while restarting client ' + err.message))
         } else {
           node.client[msg.topic](...msg.payload).then((...args) => {
             node.send({
