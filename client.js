@@ -52,11 +52,9 @@ module.exports = function (RED) {
     node.on('close', function (done) {
       if (client) {
         client.close
-          .then(() => done())
           .catch((err) => {
             node.error('Error while closing Whatsapp client "' + config.session + '": ' + err.message)
-            done()
-          })
+          }).finally(() => done())
       } else {
         done()
       }
