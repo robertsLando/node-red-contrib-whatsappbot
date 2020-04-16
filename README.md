@@ -30,7 +30,7 @@ Run the following command in the root directory of your Node-RED install
 <img src="./icons/dashboard.png" alt="Dashboard"/>
 </p>
 
-### Flow
+## Flow
 
 This is the flow to generate that Dashboard
 
