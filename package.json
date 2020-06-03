@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-whatsappbot",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "Whatsapp Bot for Node-Red",
   "main": "index.js",
   "scripts": {
@@ -28,7 +28,6 @@
   },
   "homepage": "https://github.com/robertsLando/node-red-contrib-whatsappbot#readme",
   "dependencies": {
-    "@open-wa/wa-automate": "^1.9.61",
-    "sulla": "^2.3.10"
+    "@open-wa/wa-automate": "^1.9.61"
   }
 }
