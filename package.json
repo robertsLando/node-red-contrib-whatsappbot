@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/robertsLando/node-red-contrib-whatsappbot#readme",
   "dependencies": {
-    "sulla": "^2.3.14"
+    "@open-wa/wa-automate": "^1.9.61",
+    "sulla": "^2.3.10"
   }
 }

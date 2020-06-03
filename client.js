@@ -1,7 +1,7 @@
 module.exports = function (RED) {
   'use strict'
 
-  const { create } = require('sulla')
+  const { ev, create } = require('@open-wa/wa-automate')
 
   const RETRY_TIMEOUT = 10000
 
@@ -32,16 +32,18 @@ module.exports = function (RED) {
     }
 
     async function startClient () {
-      client = await create(config.session, onQrCode, {
+      ev.on(`qr.${config.session}`, onQrCode)
+
+      client = await create({
+        sessionId: config.session,
         headless: config.headless,
         devtools: config.devtools
       })
 
-      client.onStateChange((state) => {
-        if (state === 'UNLAUNCHED') {
-          client.useHere()
+      client.onStateChanged((state) => {
+        if (state === 'CONFLICT') {
+          client.forceRefocus()
         }
-
         node.emit('stateChange', state)
       })
 
@@ -49,15 +51,25 @@ module.exports = function (RED) {
       node.emit('ready', client)
     }
 
-    node.on('close', function (done) {
+    function closeClient (done) {
       if (client) {
-        client.close
+        ev.removeAllListeners()
+        client.kill
           .catch((err) => {
             node.error('Error while closing Whatsapp client "' + config.session + '": ' + err.message)
-          }).finally(() => done())
+          }).finally(() => {
+            node.log('Session closed')
+            done()
+          })
       } else {
         done()
       }
+    }
+
+    node.on('close', closeClient)
+
+    process.on('SIGINT', function () {
+      closeClient()
     })
 
     // check for registered nodes using configuration
@@ -78,7 +90,7 @@ module.exports = function (RED) {
 
     node.restart = async function () {
       if (client) {
-        await client.close()
+        await client.kill()
         await startClient()
       }
     }

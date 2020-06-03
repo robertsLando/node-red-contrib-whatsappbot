@@ -14,9 +14,7 @@
 <img src="./icons/logo.png" alt="Logo"/>
 </p>
 
-Whatsapp Bot  🤖  for Node-Red based on [sulla](https://github.com/danielcardeenas/sulla)
-
-**BETA: This is package is under development**
+Whatsapp Bot  🤖  for Node-Red based on [open-wa/wa-automate-nodejs](https://github.com/open-wa/wa-automate-nodejs)
 
 ## Install
 
