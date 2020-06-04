@@ -22,6 +22,12 @@ Run the following command in the root directory of your Node-RED install
 
     npm install node-red-contrib-whatsappbot --save
 
+## APIs
+
+In order to send a message to an Unknown number use the api `sendMessageToId(to, text)` where `ŧo` is the number of the receiver (with prefix) and `@c.us` at the end.
+
+To all other APIs check: [here](https://open-wa.github.io/wa-automate-nodejs/classes/client.html)
+
 ## Example
 
 <p align="center">

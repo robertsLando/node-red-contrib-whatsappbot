@@ -60,7 +60,6 @@ module.exports = function (RED) {
     }
 
     node.on('input', function (msg) {
-
       if (msg.topic === 'restart') {
         setStatus('warning', 'Authenticating...')
         clientNode.restart()

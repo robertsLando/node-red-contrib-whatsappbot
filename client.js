@@ -3,6 +3,8 @@ module.exports = function (RED) {
 
   const { ev, create } = require('@open-wa/wa-automate')
 
+  const patch = require('./patch')
+
   const RETRY_TIMEOUT = 10000
 
   const EVENTS = [
@@ -39,6 +41,9 @@ module.exports = function (RED) {
         headless: config.headless,
         devtools: config.devtools
       })
+
+      // support for sendMessageToId
+      patch(client)
 
       client.onStateChanged((state) => {
         if (state === 'CONFLICT') {
