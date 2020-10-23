@@ -13,6 +13,8 @@ module.exports = function (RED) {
     'onAddedToGroup'
   ]
 
+  const noop = () => {}
+
   function WhatsappClient (config) {
     RED.nodes.createNode(this, config)
     const node = this
@@ -57,6 +59,7 @@ module.exports = function (RED) {
     }
 
     function closeClient (done) {
+      done = done || noop
       if (client) {
         ev.removeAllListeners()
         client.kill
