@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/robertsLando/node-red-contrib-whatsappbot#readme",
   "dependencies": {
-    "@open-wa/wa-automate": "^3.0.6",
+    "@open-wa/wa-automate": "^3.0.14",
     "puppeteer": "^3.0.0"
   }
 }

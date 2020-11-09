@@ -6,7 +6,7 @@ module.exports = function (client) {
  * @param {string} message
  */
   client.sendMessageToId = async function (id, message) {
-    return client._page.evaluate(
+    return client.getPage().evaluate(
       async ({ id, message }) => {
         try {
           var contact = await Store.WapQuery.queryExist(id)

@@ -41,7 +41,9 @@ module.exports = function (RED) {
       client = await create({
         sessionId: config.session,
         headless: config.headless,
-        devtools: config.devtools
+        devtools: config.devtools,
+        inDocker: config.inDocker,
+        useChrome: config.useChrome
       })
 
       // support for sendMessageToId
