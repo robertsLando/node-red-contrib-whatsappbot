@@ -46,6 +46,8 @@ module.exports = function (RED) {
         useChrome: config.useChrome
       })
 
+      node.log('Whatsapp client created for session ' + config.session)
+
       // support for sendMessageToId
       patch(client)
 
@@ -60,17 +62,21 @@ module.exports = function (RED) {
       node.emit('ready', client)
     }
 
-    function closeClient (done) {
+    async function closeClient (done) {
       done = done || noop
+
+      node.log('Closing Whatsapp client ' + config.session)
+
       if (client) {
         ev.removeAllListeners()
-        client.kill
-          .catch((err) => {
-            node.error('Error while closing Whatsapp client "' + config.session + '": ' + err.message)
-          }).finally(() => {
-            node.log('Session closed')
-            done()
-          })
+        try {
+          await client.kill()
+          node.log('Session ' + config.session + ' closed')
+        } catch (err) {
+          node.error('Error while closing Whatsapp client "' + config.session + '": ' + err.message)
+        } finally {
+          done()
+        }
       } else {
         done()
       }
@@ -100,6 +106,7 @@ module.exports = function (RED) {
 
     node.restart = async function () {
       if (client) {
+        node.log('Restarting client ' + config.session)
         await client.kill()
         await startClient()
       }
